@@ -33,11 +33,9 @@ docs/use-cases/  → use cases for new mechanics
 **merit** — system currency for stakes, rewards, and treasury operations.
 Players can also create custom currencies freely.
 
-## Game cycle
+## Resources
 
-- 1 tick = 1 hour
-- Submit actions anytime, they execute on next tick
-- Resources: wood, stone, grain, ore, clay → planks, bricks, metal, flour → tools, bread, mechanisms, buildings
+wood, stone, grain, ore, clay → planks, bricks, metal, flour → tools, bread, mechanisms, buildings
 
 ## Governance
 

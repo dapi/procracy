@@ -7,7 +7,7 @@ PRocracy is a self-governing multiplayer economic game where players interact th
 ## Architecture
 
 - `CONSTITUTION.md` — immutable principles and governance rules
-- `laws/` — core mechanics (emission, stakes, bankruptcy, ticks)
+- `laws/` — core mechanics (emission, stakes, bankruptcy)
 - `rules/` — game parameters (resources, production, market)
 - `server/` — game engine (MCP server + API)
 - `citizenship/` — player registrations
@@ -19,7 +19,6 @@ PRocracy is a self-governing multiplayer economic game where players interact th
 - All PRs with new mechanics must include a Use Case or User Story in `docs/use-cases/`
 - PR level is determined by which directories it touches
 - System currency: **merit**
-- Game tick: 1 hour
 
 ## Conventions
 
