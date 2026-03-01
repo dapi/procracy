@@ -1,0 +1,39 @@
+name: Bank Integrity Check
+
+on:
+  pull_request:
+    paths: ['bank/**']
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get base bank files
+        run: |
+          mkdir -p /tmp/base-bank
+          git show origin/${{ github.base_ref }}:bank/balances.json > /tmp/base-bank/balances.json
+          git show origin/${{ github.base_ref }}:bank/transactions.json > /tmp/base-bank/transactions.json
+
+      - name: Get changed files
+        id: changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          FILES=$(gh pr view ${{ github.event.pull_request.number }} --json files -q '.files[].path' | tr '\n' ' ')
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+
+      - name: Validate bank integrity
+        run: |
+          node scripts/check-bank.mjs \
+            /tmp/base-bank \
+            bank \
+            "${{ github.event.pull_request.user.login }}" \
+            ${{ steps.changed.outputs.files }}
