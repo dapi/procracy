@@ -4,7 +4,16 @@
     "date": "2026-03-01T00:00:00Z",
     "from": "emission",
     "to": "treasury",
-    "amount": 10000.00,
+    "amount": 10000,
     "reason": "Начальная эмиссия (Закон 001, п. 2.1)"
+  },
+  {
+    "id": 2,
+    "hash": "d6ca7e1e6c18b91d4ff1e50f5a17e1a75e8e6a81b0e182c3b7e699db0f9f29e1",
+    "date": "2026-03-01T09:40:20.649Z",
+    "from": "treasury",
+    "to": "dapi",
+    "amount": 1,
+    "reason": "Тестовый платёж"
   }
 ]

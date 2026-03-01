@@ -1,4 +1,5 @@
 {
-  "emission": -10000.00,
-  "treasury": 10000.00
+  "emission": -10000,
+  "treasury": 9999,
+  "dapi": 1
 }
