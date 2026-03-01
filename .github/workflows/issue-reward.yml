@@ -1,0 +1,58 @@
+name: Issue Reward
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  reward:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get closing issues
+        id: issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUES=$(gh pr view ${{ github.event.pull_request.number }} \
+            --json closingIssuesReferences \
+            --jq '.closingIssuesReferences[].number')
+          echo "issues=$ISSUES" >> "$GITHUB_OUTPUT"
+          if [ -z "$ISSUES" ]; then
+            echo "No closing issues found, skipping reward."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Reward author for each issue
+        if: steps.issues.outputs.skip == 'false'
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          for ISSUE in ${{ steps.issues.outputs.issues }}; do
+            echo "Rewarding $AUTHOR for issue #$ISSUE (PR #$PR_NUMBER)"
+            node scripts/reward-issue.mjs "$AUTHOR" "$ISSUE" "$PR_NUMBER"
+          done
+
+      - name: Commit and push
+        if: steps.issues.outputs.skip == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bank/
+          git commit -m "reward: 10 merits for issue closure (PR #${{ github.event.pull_request.number }})"
+          git push
