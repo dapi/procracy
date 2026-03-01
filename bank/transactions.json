@@ -2,7 +2,7 @@
   {
     "id": 1,
     "date": "2026-03-01T00:00:00Z",
-    "from": null,
+    "from": "emission",
     "to": "treasury",
     "amount": 10000.00,
     "reason": "Начальная эмиссия (Закон 001, п. 2.1)"
